@@ -96,6 +96,7 @@ namespace InfiniteVariantTool.Core.Variants
 
         public static IEnumerable<string> FindVariants(string dir)
         {
+            Directory.CreateDirectory(dir);
             foreach (string path in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories))
             {
                 string fileName = Path.GetFileName(path);
