@@ -1,7 +1,5 @@
-﻿using InfiniteVariantTool.Core.Serialization;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -92,23 +90,13 @@ namespace InfiniteVariantTool.Core.Utils
 
         public static async Task<string> GetBuildNumber(string gameDir)
         {
-            FileVersionInfo exeInfo = FileVersionInfo.GetVersionInfo(Path.Combine(gameDir, Constants.GameExeName));
-            string? version = exeInfo.ProductVersion;
-            if (version != null)
-            {
-                return version[..^2];   // remove ".0" from end
-            }
-            else
-            {
-                // if exe doesn't have version info, parse it from version.txt
-                string versionFilePath = Path.Combine(gameDir, "version.txt");
-                int shortVersionLength = 6;
-                using FileStream stream = File.OpenRead(versionFilePath);
-                byte[] buffer = new byte[shortVersionLength];
-                await stream.ReadAsync(buffer.AsMemory(0, shortVersionLength));
-                string shortVersion = Encoding.ASCII.GetString(buffer);
-                return "6.100" + shortVersion[..2] + ".1" + shortVersion[2..];
-            }
+            string versionFilePath = Path.Combine(gameDir, "version.txt");
+            int shortVersionLength = 6;
+            using FileStream stream = File.OpenRead(versionFilePath);
+            byte[] buffer = new byte[shortVersionLength];
+            await stream.ReadAsync(buffer.AsMemory(0, shortVersionLength));
+            string shortVersion = Encoding.ASCII.GetString(buffer);
+            return "6.100" + shortVersion[..2] + ".1" + shortVersion[2..];
         }
 
         public static string ReadResource(string name)
